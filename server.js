@@ -4,7 +4,6 @@ import path from 'node:path';
 
 import { WebSocketServer } from 'ws';
 import { redisPublish, redisSubscribe } from './connection.js';
-import { channel } from 'node:diagnostics_channel';
 
 const PORT = process.env.PORT || 9000;
 const REDIS_CHANNEL = 'ws-messages' 
@@ -22,7 +21,9 @@ redisSubscribe.on('message', (channel, message) => {
     if(channel === REDIS_CHANNEL){
         //broadcast channel to all of your connected clients
         wsServer.clients.forEach((client) => {
-            client.send(message.toString());
+            if(client.readyState === WebSocket.OPEN){
+                client.send(message.toString());
+            }
         })
     }
 });
@@ -40,5 +41,5 @@ wsServer.on('connection', (websocket) => {
 })
 
 httpServer.listen(PORT, () => {
-    console.log(`server is running on http://localhost/:${PORT}`)
+    console.log(`server is running on http://localhost:${PORT}`)
 })
