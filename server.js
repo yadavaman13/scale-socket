@@ -2,11 +2,11 @@ import http from 'node:http';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 
-import { WebSocketServer } from 'ws';
+import { WebSocketServer, WebSocket } from 'ws';
 import { redisPublish, redisSubscribe } from './connection.js';
 
 const PORT = process.env.PORT || 9000;
-const REDIS_CHANNEL = 'ws-messages' 
+const REDIS_CHANNEL = process.env.REDIS_CHANNEL || 'ws-messages'; 
 
 const httpServer = http.createServer(async function (req,res) {
     const indexFile = await fs.readFile(path.resolve('./index.html'), 'utf-8');

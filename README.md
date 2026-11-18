@@ -96,7 +96,7 @@ The server binds HTTP and WebSockets together on a configurable port:
 
 ```javascript
 const PORT = process.env.PORT || 9000;
-const REDIS_CHANNEL = 'ws-messages';
+const REDIS_CHANNEL = process.env.REDIS_CHANNEL || 'ws-messages'; 
 
 // 1. Subscribe to the Redis channel
 redisSubscribe.subscribe(REDIS_CHANNEL);
